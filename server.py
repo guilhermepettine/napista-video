@@ -153,7 +153,7 @@ HTML = """<!DOCTYPE html>
       <label>Segundagem da empresa (seg)</label>
       <input type="number" id="tempo" value="8.2" min="0" max="60" step="0.1">
       <label>Link do vídeo base (Google Drive)</label>
-      <input type="text" id="video_url" placeholder="https://drive.google.com/file/d/..." required>
+      <input type="text" id="video_url" value="https://drive.google.com/file/d/1jyruMpapVN4ZhJwoRcqtSVhxej0SWhUA/view" required>
       <p id="video_id_info" style="font-size:12px;color:#A5AAAF;margin-top:-14px;margin-bottom:20px;padding-left:4px;">Padrão: <code style="background:#F4F6FA;padding:2px 6px;border-radius:4px;">__VIDEO_ID_PADRAO__</code></p>
       <button type="submit" id="btn">Gerar Vídeo</button>
     </form>
