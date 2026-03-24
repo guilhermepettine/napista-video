@@ -154,6 +154,7 @@ HTML = """<!DOCTYPE html>
       <input type="number" id="tempo" value="8.2" min="0" max="60" step="0.1">
       <label>Link do vídeo base (Google Drive) <span style="font-weight:400;color:#A5AAAF">— opcional</span></label>
       <input type="text" id="video_url" placeholder="https://drive.google.com/file/d/...">
+      <p style="font-size:12px;color:#A5AAAF;margin-top:-14px;margin-bottom:20px;padding-left:4px;">Padrão: <code style="background:#F4F6FA;padding:2px 6px;border-radius:4px;">__VIDEO_ID_PADRAO__</code></p>
       <button type="submit" id="btn">Gerar Vídeo</button>
     </form>
     <div class="status" id="status"></div>
@@ -217,9 +218,15 @@ HTML = """<!DOCTYPE html>
 </html>"""
 
 
+@app.get("/info")
+def info():
+    return {"video_id_padrao": GOOGLE_DRIVE_VIDEO_ID or "não configurado"}
+
+
 @app.get("/", response_class=HTMLResponse)
 def index():
-    return HTML
+    video_id = GOOGLE_DRIVE_VIDEO_ID or "não configurado"
+    return HTML.replace("__VIDEO_ID_PADRAO__", video_id)
 
 
 @app.post("/gerar")
