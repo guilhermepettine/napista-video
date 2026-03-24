@@ -27,7 +27,7 @@ TEST_TEXTO = os.getenv("TEST_TEXTO", "Guilherme")
 # Configurações do texto na tela
 TEXTO_CONFIG = {
     "text": TEST_TEXTO,
-    "start": 7,
+    "start": 7.7,
     "end": 20,
     "font_size": 80,
     "font_color": "#E93925",   # RGB 233, 57, 37
@@ -125,7 +125,7 @@ def renderizar_video(audio_nome: bytes, audio_empresa: bytes, video_base: bytes)
 
     timeline = [
         {"type": "audio", "file_field": "audio_nome", "start": 0},
-        {"type": "audio", "file_field": "audio_empresa", "start": 7},
+        {"type": "audio", "file_field": "audio_empresa", "start": 7.7},
         {
             "type": "text",
             "text": TEXTO_CONFIG["text"],

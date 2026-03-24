@@ -224,10 +224,10 @@ async def gerar(nome: str = Form(...), empresa: str = Form(...)):
     # 3. Monta timeline
     timeline = [
         {"type": "audio", "file_field": "audio_nome",    "start": 0},
-        {"type": "audio", "file_field": "audio_empresa", "start": 7},
+        {"type": "audio", "file_field": "audio_empresa", "start": 7.7},
         {
             "type": "text", "text": empresa,
-            "start": 7, "end": 20,
+            "start": 7.7, "end": 20,
             "font_size": 80, "font_color": "#E93925",
             "font_family": "Gravitas One", "bold": False,
             "position": "baixo_esquerda",
