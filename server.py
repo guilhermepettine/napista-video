@@ -197,7 +197,8 @@ HTML = """<!DOCTYPE html>
 
       btn.disabled = true;
       btn.textContent = 'Gerando...';
-      showStatus('⏳ Gerando áudios e renderizando vídeo...<br>Isso leva cerca de 30–60 segundos.', 'loading');
+      const infoVideo = videoId ? `Vídeo: <code>${videoId}</code>` : 'Vídeo: padrão';
+      showStatus(`⏳ Gerando áudios e renderizando vídeo...<br>Isso leva cerca de 30–60 segundos.<br><small style="opacity:0.7">${infoVideo}</small>`, 'loading');
 
       try {
         const fd = new FormData();
