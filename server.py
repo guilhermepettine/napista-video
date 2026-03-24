@@ -154,7 +154,7 @@ HTML = """<!DOCTYPE html>
       <input type="number" id="tempo" value="8.2" min="0" max="60" step="0.1">
       <label>Link do vídeo base (Google Drive) <span style="font-weight:400;color:#A5AAAF">— opcional</span></label>
       <input type="text" id="video_url" placeholder="https://drive.google.com/file/d/...">
-      <p style="font-size:12px;color:#A5AAAF;margin-top:-14px;margin-bottom:20px;padding-left:4px;">Padrão: <code style="background:#F4F6FA;padding:2px 6px;border-radius:4px;">__VIDEO_ID_PADRAO__</code></p>
+      <p id="video_id_info" style="font-size:12px;color:#A5AAAF;margin-top:-14px;margin-bottom:20px;padding-left:4px;">Padrão: <code style="background:#F4F6FA;padding:2px 6px;border-radius:4px;">__VIDEO_ID_PADRAO__</code></p>
       <button type="submit" id="btn">Gerar Vídeo</button>
     </form>
     <div class="status" id="status"></div>
@@ -169,6 +169,21 @@ HTML = """<!DOCTYPE html>
       status.className = 'status ' + type;
       status.style.display = 'block';
     }
+
+    document.getElementById('video_url').addEventListener('input', function() {
+      const url = this.value.trim();
+      const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      const info = document.getElementById('video_id_info');
+      if (url && match) {
+        info.innerHTML = '✅ ID extraído: <code style="background:#EEF1FF;color:#223DFF;padding:2px 6px;border-radius:4px;">' + match[1] + '</code>';
+      } else if (url && !match) {
+        info.innerHTML = '❌ Link inválido — cole o link completo do Google Drive';
+        info.style.color = '#C0392B';
+      } else {
+        info.innerHTML = 'Padrão: <code style="background:#F4F6FA;padding:2px 6px;border-radius:4px;">__VIDEO_ID_PADRAO__</code>';
+        info.style.color = '#A5AAAF';
+      }
+    });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
