@@ -149,9 +149,9 @@ HTML = """<!DOCTYPE html>
     <p class="subtitle">Preencha os dados para gerar um vídeo personalizado.</p>
     <form id="form">
       <label>Nome</label>
-      <input type="text" id="nome" placeholder="Ex: Guilherme" maxlength="8" required>
+      <input type="text" id="nome" placeholder="Ex: Guilherme" maxlength="9" required>
       <label>Empresa</label>
-      <input type="text" id="empresa" placeholder="Ex: Car Drive" maxlength="8" required>
+      <input type="text" id="empresa" placeholder="Ex: Car Drive" maxlength="9" required>
       <label>Segundagem da empresa (seg)</label>
       <input type="number" id="tempo" value="8.1" min="0" max="60" step="0.1">
       <label>Link do vídeo base (Google Drive)</label>
