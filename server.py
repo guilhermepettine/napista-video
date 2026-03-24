@@ -21,11 +21,11 @@ GOOGLE_DRIVE_VIDEO_ID   = os.getenv("GOOGLE_DRIVE_VIDEO_ID", "")
 FFMPEG_SERVICE_URL      = os.getenv("FFMPEG_SERVICE_URL", "")
 
 VOICE_SETTINGS = {
-    "stability": 0.35,
+    "stability": 0.40,
     "similarity_boost": 0.75,
-    "style": 0.35,
+    "style": 0.47,
     "use_speaker_boost": True,
-    "speed": 0.97,
+    "speed": 1.0,
 }
 
 HTML = """<!DOCTYPE html>

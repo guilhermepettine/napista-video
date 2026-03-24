@@ -38,11 +38,11 @@ TEXTO_CONFIG = {
 
 # Configurações de voz ElevenLabs
 VOICE_SETTINGS = {
-    "stability": 0.35,
+    "stability": 0.40,
     "similarity_boost": 0.75,
-    "style": 0.35,
+    "style": 0.47,
     "use_speaker_boost": True,
-    "speed": 0.97,   # slider ~60% do range 0.7–1.2
+    "speed": 1.0,
 }
 
 
