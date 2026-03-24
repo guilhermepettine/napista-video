@@ -28,6 +28,8 @@ VOICE_SETTINGS = {
     "speed": 1.0,
 }
 
+VOICE_SETTINGS_NOME = {**VOICE_SETTINGS, "speed": 0.9}
+
 HTML = """<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -251,7 +253,7 @@ def index():
 @app.post("/gerar")
 async def gerar(nome: str = Form(...), empresa: str = Form(...), tempo: float = Form(8.2), video_id: str = Form(...)):
     # 1. Gera áudios
-    audio_nome    = _gerar_audio(f"Oi {nome}, bem-vindo.")
+    audio_nome    = _gerar_audio(f"Oi {nome}, bem-vindo.", settings=VOICE_SETTINGS_NOME)
     audio_empresa = _gerar_audio(f"Aqui a {empresa}")
 
     # 2. Monta timeline
@@ -288,11 +290,12 @@ async def gerar(nome: str = Form(...), empresa: str = Form(...), tempo: float = 
     )
 
 
-def _gerar_audio(texto: str) -> bytes:
+def _gerar_audio(texto: str, settings: dict = None) -> bytes:
+    settings = settings or VOICE_SETTINGS
     r = requests.post(
         f"https://api.elevenlabs.io/v1/text-to-speech/{ELEVENLABS_VOICE_ID}",
         headers={"xi-api-key": ELEVENLABS_API_KEY, "Content-Type": "application/json", "Accept": "audio/mpeg"},
-        json={"text": texto, "model_id": "eleven_turbo_v2_5", "language_code": "pt", "voice_settings": VOICE_SETTINGS},
+        json={"text": texto, "model_id": "eleven_turbo_v2_5", "language_code": "pt", "voice_settings": settings},
         timeout=30,
     )
     if r.status_code != 200:
