@@ -254,10 +254,7 @@ async def gerar(nome: str = Form(...), empresa: str = Form(...), tempo: float = 
     audio_nome    = _gerar_audio(f"Oi {nome}, bem-vindo ao NaPista.")
     audio_empresa = _gerar_audio(f"Aqui a {empresa}")
 
-    # 2. Baixa vídeo base do Drive
-    video_base = _baixar_drive(video_id)
-
-    # 3. Monta timeline
+    # 2. Monta timeline
     timeline = [
         {"type": "audio", "file_field": "audio_nome",    "start": 0},
         {"type": "audio", "file_field": "audio_empresa", "start": tempo},
@@ -270,16 +267,15 @@ async def gerar(nome: str = Form(...), empresa: str = Form(...), tempo: float = 
         },
     ]
 
-    # 4. Renderiza via FFmpeg Service
+    # 3. Renderiza via FFmpeg Service (passa o Drive ID para ele baixar)
     files = {
-        "audio_nome":    ("audio_nome.mp3",    audio_nome,    "audio/mpeg"),
-        "audio_empresa": ("audio_empresa.mp3",  audio_empresa, "audio/mpeg"),
-        "video_base":    ("video_base.mp4",     video_base,    "video/mp4"),
+        "audio_nome":    ("audio_nome.mp3",   audio_nome,    "audio/mpeg"),
+        "audio_empresa": ("audio_empresa.mp3", audio_empresa, "audio/mpeg"),
     }
     r = requests.post(
         f"{FFMPEG_SERVICE_URL}/render",
         files=files,
-        data={"timeline_json": json.dumps(timeline)},
+        data={"timeline_json": json.dumps(timeline), "video_base_drive_id": video_id},
         timeout=180,
     )
     if r.status_code != 200:
@@ -304,16 +300,3 @@ def _gerar_audio(texto: str) -> bytes:
     return r.content
 
 
-def _baixar_drive(drive_id: str) -> bytes:
-    sa_info = json.loads(GOOGLE_SERVICE_ACCOUNT_JSON)
-    creds = service_account.Credentials.from_service_account_info(
-        sa_info, scopes=["https://www.googleapis.com/auth/drive.readonly"]
-    )
-    service = build("drive", "v3", credentials=creds)
-    request = service.files().get_media(fileId=drive_id, supportsAllDrives=True)
-    buffer = io.BytesIO()
-    downloader = MediaIoBaseDownload(buffer, request)
-    done = False
-    while not done:
-        _, done = downloader.next_chunk()
-    return buffer.getvalue()
