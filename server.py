@@ -34,90 +34,117 @@ HTML = """<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NaPista — Gerador de Vídeo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Work+Sans:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0f0f0f;
-      color: #fff;
+      font-family: 'Work Sans', sans-serif;
+      background: #F4F6FA;
+      color: #252626;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
     }
+    header {
+      width: 100%;
+      background: #fff;
+      border-bottom: 1px solid #E9EDF2;
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      position: fixed;
+      top: 0;
+    }
+    .logo-text {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: #223DFF;
+      letter-spacing: -0.5px;
+    }
     .card {
-      background: #1a1a1a;
+      background: #fff;
       border-radius: 16px;
       padding: 48px;
       width: 100%;
       max-width: 480px;
-      border: 1px solid #2a2a2a;
-    }
-    .logo {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: #E93925;
-      margin-bottom: 8px;
+      box-shadow: 0px 2px 4px rgba(0,0,0,0.08), 0px 8px 24px rgba(0,0,0,0.06);
+      margin-top: 80px;
     }
     h1 {
-      font-size: 24px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 28px;
       font-weight: 700;
+      margin-bottom: 8px;
+      color: #091868;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #67696B;
       margin-bottom: 32px;
-      color: #fff;
     }
     label {
       display: block;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: #888;
+      font-size: 13px;
+      font-weight: 500;
+      color: #67696B;
       margin-bottom: 8px;
     }
     input {
       width: 100%;
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 8px;
-      padding: 14px 16px;
-      font-size: 16px;
-      color: #fff;
-      margin-bottom: 24px;
+      background: #fff;
+      border: 1.5px solid #E9EDF2;
+      border-radius: 99px;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-family: 'Work Sans', sans-serif;
+      color: #252626;
+      margin-bottom: 20px;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    input:focus { border-color: #E93925; }
+    input:focus {
+      border-color: #223DFF;
+      box-shadow: 0px 4px 8px rgba(0, 49, 188, 0.16);
+    }
     button {
       width: 100%;
-      background: #E93925;
+      background: #223DFF;
       color: #fff;
       border: none;
-      border-radius: 8px;
+      border-radius: 99px;
       padding: 16px;
-      font-size: 16px;
+      font-size: 15px;
+      font-family: 'DM Sans', sans-serif;
       font-weight: 700;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: background 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.2px;
     }
-    button:hover { opacity: 0.9; }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    button:hover { background: #091868; box-shadow: 0px 4px 12px rgba(34,61,255,0.3); }
+    button:disabled { background: #A5AAAF; cursor: not-allowed; box-shadow: none; }
     .status {
-      margin-top: 24px;
-      padding: 16px;
-      border-radius: 8px;
+      margin-top: 20px;
+      padding: 14px 18px;
+      border-radius: 12px;
       font-size: 14px;
       display: none;
+      line-height: 1.5;
     }
-    .status.loading { background: #1e2a1e; color: #4ade80; border: 1px solid #2a4a2a; }
-    .status.error   { background: #2a1a1a; color: #f87171; border: 1px solid #4a2a2a; }
+    .status.loading { background: #EEF1FF; color: #223DFF; border: 1px solid #C7CFFE; }
+    .status.success { background: #EEFAF3; color: #1a7a45; border: 1px solid #B0E8C8; }
+    .status.error   { background: #FFF0EE; color: #C0392B; border: 1px solid #F5C0BA; }
   </style>
 </head>
 <body>
+  <header>
+    <span class="logo-text">napista</span>
+  </header>
   <div class="card">
-    <div class="logo">NaPista</div>
     <h1>Gerador de Vídeo</h1>
+    <p class="subtitle">Preencha os dados para gerar um vídeo personalizado.</p>
     <form id="form">
       <label>Nome</label>
       <input type="text" id="nome" placeholder="Ex: Guilherme" required>
@@ -133,7 +160,7 @@ HTML = """<!DOCTYPE html>
     const status = document.getElementById('status');
 
     function showStatus(msg, type) {
-      status.textContent = msg;
+      status.innerHTML = msg;
       status.className = 'status ' + type;
       status.style.display = 'block';
     }
@@ -146,7 +173,7 @@ HTML = """<!DOCTYPE html>
 
       btn.disabled = true;
       btn.textContent = 'Gerando...';
-      showStatus('⏳ Gerando áudios e renderizando vídeo. Isso leva cerca de 30–60 segundos...', 'loading');
+      showStatus('⏳ Gerando áudios e renderizando vídeo...<br>Isso leva cerca de 30–60 segundos.', 'loading');
 
       try {
         const fd = new FormData();
@@ -167,7 +194,7 @@ HTML = """<!DOCTYPE html>
         a.click();
         URL.revokeObjectURL(url);
 
-        showStatus('✅ Vídeo gerado e baixado com sucesso!', 'loading');
+        showStatus('✅ Vídeo gerado e baixado com sucesso!', 'success');
       } catch (err) {
         showStatus('❌ Erro: ' + err.message, 'error');
       } finally {
