@@ -152,8 +152,8 @@ HTML = """<!DOCTYPE html>
       <input type="text" id="empresa" placeholder="Ex: Car Drive" required>
       <label>Segundagem da empresa (seg)</label>
       <input type="number" id="tempo" value="8.2" min="0" max="60" step="0.1">
-      <label>Link do vídeo base (Google Drive) <span style="font-weight:400;color:#A5AAAF">— opcional</span></label>
-      <input type="text" id="video_url" placeholder="https://drive.google.com/file/d/...">
+      <label>Link do vídeo base (Google Drive)</label>
+      <input type="text" id="video_url" placeholder="https://drive.google.com/file/d/..." required>
       <p id="video_id_info" style="font-size:12px;color:#A5AAAF;margin-top:-14px;margin-bottom:20px;padding-left:4px;">Padrão: <code style="background:#F4F6FA;padding:2px 6px;border-radius:4px;">__VIDEO_ID_PADRAO__</code></p>
       <button type="submit" id="btn">Gerar Vídeo</button>
     </form>
@@ -193,7 +193,10 @@ HTML = """<!DOCTYPE html>
       const videoUrl = document.getElementById('video_url').value.trim();
       const videoMatch = videoUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
       const videoId = videoMatch ? videoMatch[1] : '';
-      if (!nome || !empresa) return;
+      if (!nome || !empresa || !videoId) {
+        if (!videoId) showStatus('❌ Cole um link válido do Google Drive para o vídeo base.', 'error');
+        return;
+      }
 
       btn.disabled = true;
       btn.textContent = 'Gerando...';
@@ -246,14 +249,13 @@ def index():
 
 
 @app.post("/gerar")
-async def gerar(nome: str = Form(...), empresa: str = Form(...), tempo: float = Form(8.2), video_id: str = Form(None)):
+async def gerar(nome: str = Form(...), empresa: str = Form(...), tempo: float = Form(8.2), video_id: str = Form(...)):
     # 1. Gera áudios
     audio_nome    = _gerar_audio(f"Oi {nome}, bem-vindo ao NaPista.")
     audio_empresa = _gerar_audio(f"Aqui a {empresa}")
 
     # 2. Baixa vídeo base do Drive
-    drive_id = video_id if video_id else GOOGLE_DRIVE_VIDEO_ID
-    video_base = _baixar_drive(drive_id)
+    video_base = _baixar_drive(video_id)
 
     # 3. Monta timeline
     timeline = [
