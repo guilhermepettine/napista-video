@@ -251,7 +251,7 @@ def index():
 @app.post("/gerar")
 async def gerar(nome: str = Form(...), empresa: str = Form(...), tempo: float = Form(8.2), video_id: str = Form(...)):
     # 1. Gera áudios
-    audio_nome    = _gerar_audio(f"Oi {nome}, bem-vindo ao NaPista.")
+    audio_nome    = _gerar_audio(f"Oi {nome}, bem-vindo.")
     audio_empresa = _gerar_audio(f"Aqui a {empresa}")
 
     # 2. Monta timeline
