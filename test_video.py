@@ -82,7 +82,7 @@ def gerar_audio(texto: str, label: str) -> bytes:
     }
     body = {
         "text": texto,
-        "model_id": "eleven_multilingual_v2",
+        "model_id": "eleven_turbo_v2_5",
         "language_code": "pt",
         "voice_settings": VOICE_SETTINGS,
     }

@@ -260,7 +260,7 @@ def _gerar_audio(texto: str) -> bytes:
     r = requests.post(
         f"https://api.elevenlabs.io/v1/text-to-speech/{ELEVENLABS_VOICE_ID}",
         headers={"xi-api-key": ELEVENLABS_API_KEY, "Content-Type": "application/json", "Accept": "audio/mpeg"},
-        json={"text": texto, "model_id": "eleven_multilingual_v2", "language_code": "pt", "voice_settings": VOICE_SETTINGS},
+        json={"text": texto, "model_id": "eleven_turbo_v2_5", "language_code": "pt", "voice_settings": VOICE_SETTINGS},
         timeout=30,
     )
     if r.status_code != 200:
