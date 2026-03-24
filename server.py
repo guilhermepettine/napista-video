@@ -150,6 +150,10 @@ HTML = """<!DOCTYPE html>
       <input type="text" id="nome" placeholder="Ex: Guilherme" required>
       <label>Empresa</label>
       <input type="text" id="empresa" placeholder="Ex: Car Drive" required>
+      <label>Segundagem da empresa (seg)</label>
+      <input type="number" id="tempo" value="8.2" min="0" max="60" step="0.1">
+      <label>Link do vídeo base (Google Drive) <span style="font-weight:400;color:#A5AAAF">— opcional</span></label>
+      <input type="text" id="video_url" placeholder="https://drive.google.com/file/d/...">
       <button type="submit" id="btn">Gerar Vídeo</button>
     </form>
     <div class="status" id="status"></div>
@@ -169,6 +173,10 @@ HTML = """<!DOCTYPE html>
       e.preventDefault();
       const nome = document.getElementById('nome').value.trim();
       const empresa = document.getElementById('empresa').value.trim();
+      const tempo = parseFloat(document.getElementById('tempo').value) || 8.2;
+      const videoUrl = document.getElementById('video_url').value.trim();
+      const videoMatch = videoUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      const videoId = videoMatch ? videoMatch[1] : '';
       if (!nome || !empresa) return;
 
       btn.disabled = true;
@@ -179,6 +187,8 @@ HTML = """<!DOCTYPE html>
         const fd = new FormData();
         fd.append('nome', nome);
         fd.append('empresa', empresa);
+        fd.append('tempo', tempo);
+        if (videoId) fd.append('video_id', videoId);
 
         const res = await fetch('/gerar', { method: 'POST', body: fd });
         if (!res.ok) {
@@ -213,21 +223,22 @@ def index():
 
 
 @app.post("/gerar")
-async def gerar(nome: str = Form(...), empresa: str = Form(...)):
+async def gerar(nome: str = Form(...), empresa: str = Form(...), tempo: float = Form(8.2), video_id: str = Form(None)):
     # 1. Gera áudios
     audio_nome    = _gerar_audio(f"Oi {nome}, bem-vindo ao NaPista.")
     audio_empresa = _gerar_audio(f"Aqui a {empresa}")
 
     # 2. Baixa vídeo base do Drive
-    video_base = _baixar_drive(GOOGLE_DRIVE_VIDEO_ID)
+    drive_id = video_id if video_id else GOOGLE_DRIVE_VIDEO_ID
+    video_base = _baixar_drive(drive_id)
 
     # 3. Monta timeline
     timeline = [
         {"type": "audio", "file_field": "audio_nome",    "start": 0},
-        {"type": "audio", "file_field": "audio_empresa", "start": 8.2},
+        {"type": "audio", "file_field": "audio_empresa", "start": tempo},
         {
             "type": "text", "text": empresa,
-            "start": 8.2, "end": 20,
+            "start": tempo, "end": tempo + 12,
             "font_size": 80, "font_color": "#E93925",
             "font_family": "Gravitas One", "bold": False,
             "position": "baixo_esquerda",
