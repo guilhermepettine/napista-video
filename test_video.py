@@ -173,8 +173,8 @@ def main():
     checar_config()
     checar_ffmpeg()
 
-    audio_nome = gerar_audio(TEST_NOME, "audio_nome")
-    audio_empresa = gerar_audio(TEST_EMPRESA, "audio_empresa")
+    audio_nome = gerar_audio(f"Oi {TEST_NOME}, bem-vindo ao NaPista.", "audio_nome")
+    audio_empresa = gerar_audio(f"Aqui a {TEST_EMPRESA}", "audio_empresa")
     video_base = baixar_video_drive(GOOGLE_DRIVE_VIDEO_ID)
     video_final = renderizar_video(audio_nome, audio_empresa, video_base)
     salvar_video(video_final)

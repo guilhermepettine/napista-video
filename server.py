@@ -215,8 +215,8 @@ def index():
 @app.post("/gerar")
 async def gerar(nome: str = Form(...), empresa: str = Form(...)):
     # 1. Gera áudios
-    audio_nome    = _gerar_audio(nome)
-    audio_empresa = _gerar_audio(empresa)
+    audio_nome    = _gerar_audio(f"Oi {nome}, bem-vindo ao NaPista.")
+    audio_empresa = _gerar_audio(f"Aqui a {empresa}")
 
     # 2. Baixa vídeo base do Drive
     video_base = _baixar_drive(GOOGLE_DRIVE_VIDEO_ID)
